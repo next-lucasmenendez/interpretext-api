@@ -4,73 +4,45 @@ package main
 import (
 	a "github.com/lucasmenendez/gobstract"
 	f "github.com/lucasmenendez/framework.go"
+	"fmt"
 )
 
 func auth(c f.Context) {
+	fmt.Println("Middleware")
 	c.Continue()
 }
 
-func hightlights(c f.Context) {
+func handler(c f.Context) {
 	var err error
 	var form f.Form
 	if form, err = c.ParseForm(); err != nil {
 		c.WriteError(err, 500)
 	}
 
-	lang := form["lang"]
-	input := form["text"]
+	var ok bool
+	var lang, input string
+	if lang, ok = form.Get("lang"); !ok {
+		c.WriteErrorMessage("No language provided.", 400)
+		return
+	}
+
+	if input, ok = form.Get("input"); !ok {
+		c.WriteErrorMessage("No text provided.", 400)
+		return
+	}
 
 	if abstract, err := a.NewAbstract(input, lang); err != nil {
 		c.WriteError(err, 500)
 	} else {
-		var res map[string][]string = map[string][]string {
+		var res map[string]interface{} = map[string]interface{} {
 			"highlights": abstract.GetHightlights(),
-		}
-
-		c.JsonWrite(res, 200)
-	}
-}
-
-func keywords(c f.Context) {
-	var err error
-	var form f.Form
-	if form, err = c.ParseForm(); err != nil {
-		c.WriteError(err, 500)
-	}
-
-	lang := form["lang"]
-	input := form["text"]
-
-	if abstract, err := a.NewAbstract(input, lang); err != nil {
-		c.WriteError(err, 500)
-	} else {
-		var res map[string][]string = map[string][]string {
 			"keywords": abstract.GetKeywords(),
-		}
-
-		c.JsonWrite(res, 200)
-	}
-}
-
-func bestSentence(c f.Context) {
-	var err error
-	var form f.Form
-	if form, err = c.ParseForm(); err != nil {
-		c.WriteError(err, 500)
-	}
-
-	lang := form["lang"]
-	input := form["text"]
-
-	if abstract, err := a.NewAbstract(input, lang); err != nil {
-		c.WriteError(err, 500)
-	} else {
-		var res map[string]string = map[string]string {
 			"best_sentence": abstract.GetBestSentence(),
 		}
 
 		c.JsonWrite(res, 200)
 	}
+	return
 }
 
 func main() {
@@ -79,8 +51,6 @@ func main() {
 	s.DebugMode(true)
 	s.SetPort(9999)
 
-	s.POST("/highlights", hightlights)
-	s.POST("/keywords", keywords)
-	s.POST("/best-sentence", bestSentence)
+	s.POST("/", handler, auth)
 	s.Run()
 }
