@@ -4,7 +4,9 @@ package main
 import (
 	a "github.com/lucasmenendez/gobstract"
 	f "github.com/lucasmenendez/framework.go"
+	"strconv"
 	"fmt"
+	"os"
 )
 
 func auth(c f.Context) {
@@ -49,7 +51,14 @@ func main() {
 	s := f.New()
 
 	s.DebugMode(true)
-	s.SetPort(9999)
+
+	port_raw := os.Getenv("PORT")
+	if port, err := strconv.Atoi(port_raw); err != nil {
+		fmt.Println("No port provided.")
+		return
+	} else {
+		s.SetPort(port)
+	}
 
 	s.POST("/", handler, auth)
 	s.Run()
