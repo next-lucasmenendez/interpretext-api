@@ -5,6 +5,8 @@ import (
 	a "github.com/lucasmenendez/gobstract"
 	f "github.com/lucasmenendez/framework.go"
 	"strconv"
+	"strings"
+	"regexp"
 	"fmt"
 	"os"
 )
@@ -36,13 +38,24 @@ func handler(c f.Context) {
 	if abstract, err := a.NewAbstract(input, lang); err != nil {
 		c.WriteError(err, 500)
 	} else {
-		var res map[string]interface{} = map[string]interface{} {
-			"highlights": abstract.GetHightlights(),
-			"keywords": abstract.GetKeywords(),
-			"best_sentence": abstract.GetBestSentence(),
+		var sentence string = abstract.GetBestSentence()
+		var keywords []string = abstract.GetKeywords()
+
+		var splitter *regexp.Regexp = regexp.MustCompile(`\s`)
+		var words []string = splitter.Split(sentence, -1)
+
+		var bestSentence string
+		for _, word := range words {
+			for _, keyword := range keywords {
+				if strings.TrimSpace(strings.ToLower(word)) == strings.TrimSpace(strings.ToLower(keyword)) {
+					word = fmt.Sprintf("#%s", word)
+				}
+			}
+
+			bestSentence = fmt.Sprintf("%s %s", bestSentence, word)
 		}
 
-		c.JsonWrite(res, 200)
+		c.JsonWrite(map[string]string{"best_sentence": bestSentence}, 200)
 	}
 	return
 }
@@ -54,8 +67,8 @@ func main() {
 
 	port_raw := os.Getenv("PORT")
 	if port, err := strconv.Atoi(port_raw); err != nil {
-		fmt.Println("No port provided.")
-		return
+		fmt.Println("No port provided. Using default :9999")
+		port = 9999
 	} else {
 		s.SetPort(port)
 	}
