@@ -44,17 +44,18 @@ func handler(c f.Context) {
 		var splitter *regexp.Regexp = regexp.MustCompile(`\s`)
 		var words []string = splitter.Split(sentence, -1)
 
-		var bestSentence string
 		for _, word := range words {
 			for _, keyword := range keywords {
 				if strings.TrimSpace(strings.ToLower(word)) == strings.TrimSpace(strings.ToLower(keyword)) {
 					word = fmt.Sprintf("#%s", word)
 				}
 			}
-
-			bestSentence = fmt.Sprintf("%s %s", bestSentence, word)
 		}
 
+		var bestSentence string = strings.Join(words, " ")
+		if len(bestSentence) > 113 {
+			bestSentence = fmt.Sprintf("%s...", bestSentence[:110])
+		}
 		c.JsonWrite(map[string]string{"best_sentence": bestSentence}, 200)
 	}
 	return
