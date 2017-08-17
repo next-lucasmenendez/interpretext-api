@@ -16,6 +16,45 @@ func auth(c f.Context) {
 	c.Continue()
 }
 
+func getTweet(input, lang string) string {
+	if abstract, err := a.NewAbstract(input, lang); err != nil {
+		return ""
+	} else {
+		var sentence string = abstract.GetBestSentence()
+		var keywords []string = abstract.GetKeywords()
+
+		var bestSentence string = composeTweet(sentence, keywords)
+		return cleanTweet(bestSentence)
+	}
+	return ""
+}
+
+func composeTweet(tweet string, keywords []string) string {
+	var splitter *regexp.Regexp = regexp.MustCompile(`\s`)
+	var words []string = splitter.Split(tweet, -1)
+
+	for _, word := range words {
+		for _, keyword := range keywords {
+			if strings.TrimSpace(strings.ToLower(word)) == strings.TrimSpace(strings.ToLower(keyword)) {
+				word = fmt.Sprintf("#%s", word)
+			}
+		}
+	}
+
+	return strings.Join(words, " ")
+}
+
+func cleanTweet(tweet string) string {
+	var cleaner *regexp.Regexp = regexp.MustCompile(`(\[.+]|\(.+\))`)
+	var clean string = cleaner.ReplaceAllString(tweet, "")
+	tweet = strings.TrimSpace(clean)
+
+	if len(tweet) > 113 {
+		tweet = fmt.Sprintf("%s...", tweet[:110])
+	}
+	return tweet
+}
+
 func handler(c f.Context) {
 	var err error
 	var form f.Form
@@ -35,28 +74,11 @@ func handler(c f.Context) {
 		return
 	}
 
-	if abstract, err := a.NewAbstract(input, lang); err != nil {
-		c.WriteError(err, 500)
+	var tweet string = getTweet(input, lang)
+	if tweet != "" {
+		c.JsonWrite(map[string]string{"best_sentence": tweet}, 200)
 	} else {
-		var sentence string = abstract.GetBestSentence()
-		var keywords []string = abstract.GetKeywords()
-
-		var splitter *regexp.Regexp = regexp.MustCompile(`\s`)
-		var words []string = splitter.Split(sentence, -1)
-
-		for _, word := range words {
-			for _, keyword := range keywords {
-				if strings.TrimSpace(strings.ToLower(word)) == strings.TrimSpace(strings.ToLower(keyword)) {
-					word = fmt.Sprintf("#%s", word)
-				}
-			}
-		}
-
-		var bestSentence string = strings.Join(words, " ")
-		if len(bestSentence) > 113 {
-			bestSentence = fmt.Sprintf("%s...", bestSentence[:110])
-		}
-		c.JsonWrite(map[string]string{"best_sentence": bestSentence}, 200)
+		c.WriteErrorMessage("Tweet not found :(", 404)
 	}
 	return
 }
