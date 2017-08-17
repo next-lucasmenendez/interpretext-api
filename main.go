@@ -50,7 +50,9 @@ func cleanTweet(tweet string) string {
 	tweet = strings.TrimSpace(clean)
 
 	if len(tweet) > 113 {
-		tweet = fmt.Sprintf("%s...", tweet[:110])
+		tweet = fmt.Sprintf("\"%s...\"", tweet[:110])
+	} else {
+		tweet = fmt.Sprintf("\"%s\"", tweet)
 	}
 	return tweet
 }
