@@ -44,7 +44,7 @@ func composeTweet(tweet string, keywords []string) string {
 		words = append(words, word)
 	}
 
-	return strings.Join(words, " ")
+	return strings.Join(rawWords, " ")
 }
 
 func cleanTweet(tweet string) string {
