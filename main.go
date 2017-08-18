@@ -31,14 +31,17 @@ func getTweet(input, lang string) string {
 
 func composeTweet(tweet string, keywords []string) string {
 	var splitter *regexp.Regexp = regexp.MustCompile(`\s`)
-	var words []string = splitter.Split(tweet, -1)
+	var rawWords []string = splitter.Split(tweet, -1)
 
-	for _, word := range words {
+	var words []string = make([]string, len(rawWords))
+	for _, word := range rawWords {
 		for _, keyword := range keywords {
 			if strings.TrimSpace(strings.ToLower(word)) == strings.TrimSpace(strings.ToLower(keyword)) {
 				word = fmt.Sprintf("#%s", word)
+				break
 			}
 		}
+		words = append(words, word)
 	}
 
 	return strings.Join(words, " ")
