@@ -11,11 +11,6 @@ import (
 	"os"
 )
 
-func auth(c f.Context) {
-	fmt.Println("Middleware")
-	c.Continue()
-}
-
 func getTweet(input, lang string) string {
 	if abstract, err := a.NewAbstract(input, lang); err != nil {
 		return ""
@@ -101,6 +96,6 @@ func main() {
 		s.SetPort(port)
 	}
 
-	s.POST("/", handler, auth)
+	s.POST("/", handler)
 	s.Run()
 }
