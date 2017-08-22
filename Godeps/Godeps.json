@@ -1,0 +1,16 @@
+{
+	"ImportPath": "github.com/beeva-lucasmenendez/interpretext-api",
+	"GoVersion": "go1.8",
+	"GodepVersion": "v79",
+	"Deps": [
+		{
+			"ImportPath": "github.com/lucasmenendez/framework.go",
+			"Comment": "v0.0.1-15-g04fea5e",
+			"Rev": "04fea5e80546cd4fc151a1d744834ca828c56b8b"
+		},
+		{
+			"ImportPath": "github.com/lucasmenendez/gobstract",
+			"Rev": "6d335fc5aab60594ab091d312b615f895cb713b0"
+		}
+	]
+}
