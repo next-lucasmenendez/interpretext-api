@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/beeva-lucasmenendez/interpretext-api/api"
+	"github.com/beeva-labs/interpretext-api/api"
 	"strconv"
 	"os"
 
