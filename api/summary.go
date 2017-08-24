@@ -9,7 +9,7 @@ func getSummary(input, lang string) map[string]interface{} {
 	if abstract, err := a.NewAbstract(input, lang); err != nil {
 		return nil
 	} else {
-		var highlights []string = abstract.GetHightlights()
+		var highlights []string = abstract.GetHightlights(10)
 		var bestSentence string = abstract.GetBestSentence()
 		var keywords []string = abstract.GetKeywords()
 
