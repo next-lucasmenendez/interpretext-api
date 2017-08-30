@@ -1,6 +1,9 @@
 package api
 
-import f "github.com/lucasmenendez/framework.go"
+import (
+	f "github.com/lucasmenendez/framework.go"
+	"strconv"
+)
 
 func TweetHandler(c f.Context) {
 	var err error
@@ -38,7 +41,7 @@ func SummaryHandler(c f.Context) {
 	}
 
 	var ok bool
-	var lang, input string
+	var lang, input, raw_count string
 	if lang, ok = form.Get("lang"); !ok {
 		c.WriteErrorMessage("No language provided.", 400)
 		return
@@ -49,7 +52,15 @@ func SummaryHandler(c f.Context) {
 		return
 	}
 
-	var data map[string]interface{} = getSummary(input, lang)
+	var count int
+	if raw_count, ok = form.Get("count"); !ok {
+		count = 10
+	} else if count, err = strconv.Atoi(raw_count); err != nil {
+		c.WriteErrorMessage("Bad count provided.", 400)
+		return
+	}
+
+	var data map[string]interface{} = getSummary(input, lang, count)
 	if data != nil {
 		c.JsonWrite(data, 200)
 	} else {

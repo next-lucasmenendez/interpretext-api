@@ -5,11 +5,11 @@ import (
 
 )
 
-func getSummary(input, lang string) map[string]interface{} {
+func getSummary(input, lang string, count int) map[string]interface{} {
 	if abstract, err := a.NewAbstract(input, lang); err != nil {
 		return nil
 	} else {
-		var highlights []string = abstract.GetHightlights(10)
+		var highlights []string = abstract.GetHightlights(count)
 		var bestSentence string = abstract.GetBestSentence()
 		var keywords []string = abstract.GetKeywords()
 
