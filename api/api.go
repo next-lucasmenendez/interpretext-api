@@ -1,8 +1,8 @@
 package api
 
 import (
-	f "github.com/lucasmenendez/framework.go"
 	"strconv"
+	f "github.com/lucasmenendez/framework.go"
 )
 
 func TweetHandler(c f.Context) {
@@ -88,9 +88,8 @@ func MapHandler(c f.Context) {
 		return
 	}
 
-	var data map[string]interface{}
-	if data, err = getMap(input, lang); data != nil || err != nil {
-		c.JsonWrite(data, 200)
+	if uri := getMap(input, lang); uri != "" {
+		c.JsonWrite(map[string]string{"geojson": uri}, 200)
 	} else {
 		c.WriteErrorMessage("Sorry! We didn't find any content :(", 404)
 	}

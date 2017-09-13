@@ -20,9 +20,8 @@ func main() {
 		s.SetPort(port)
 	}
 
-	s.POST("/", api.TweetHandler)
+	s.POST("/map", api.MapHandler)
 	s.POST("/tweet", api.TweetHandler)
 	s.POST("/summary", api.SummaryHandler)
-	s.POST("/map", api.MapHandler)
 	s.Run()
 }
