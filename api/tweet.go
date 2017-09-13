@@ -42,11 +42,6 @@ func cleanTweet(tweet string) string {
 	var cleaner *regexp.Regexp = regexp.MustCompile(`(\[.+]|\(.+\))`)
 	var clean string = cleaner.ReplaceAllString(tweet, "")
 	tweet = strings.TrimSpace(clean)
-
-	if len(tweet) > 113 {
-		tweet = fmt.Sprintf("\"%s...\"", tweet[:110])
-	} else {
-		tweet = fmt.Sprintf("\"%s\"", tweet)
-	}
-	return tweet
+	
+	return fmt.Sprintf("\"%s\"", tweet)
 }
