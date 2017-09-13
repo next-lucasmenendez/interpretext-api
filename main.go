@@ -23,5 +23,6 @@ func main() {
 	s.POST("/", api.TweetHandler)
 	s.POST("/tweet", api.TweetHandler)
 	s.POST("/summary", api.SummaryHandler)
+	s.POST("/map", api.MapHandler)
 	s.Run()
 }
