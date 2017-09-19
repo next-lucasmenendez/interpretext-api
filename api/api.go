@@ -6,20 +6,14 @@ import (
 )
 
 func TweetHandler(c f.Context) {
-	var err error
-	var form f.Form
-	if form, err = c.ParseForm(); err != nil {
-		c.WriteError(err, 500)
-	}
-
 	var ok bool
 	var lang, input string
-	if lang, ok = form.Get("lang"); !ok {
+	if lang, ok = c.FormValue("lang"); !ok {
 		c.WriteErrorMessage("No language provided.", 400)
 		return
 	}
 
-	if input, ok = form.Get("input"); !ok {
+	if input, ok = c.FormValue("input"); !ok {
 		c.WriteErrorMessage("No text provided.", 400)
 		return
 	}
@@ -35,25 +29,19 @@ func TweetHandler(c f.Context) {
 
 func SummaryHandler(c f.Context) {
 	var err error
-	var form f.Form
-	if form, err = c.ParseForm(); err != nil {
-		c.WriteError(err, 500)
-	}
 
 	var ok bool
 	var lang, input, raw_count string
-	if lang, ok = form.Get("lang"); !ok {
+	if lang, ok = c.FormValue("lang"); !ok {
 		c.WriteErrorMessage("No language provided.", 400)
-		return
 	}
 
-	if input, ok = form.Get("input"); !ok {
+	if input, ok = c.FormValue("input"); !ok {
 		c.WriteErrorMessage("No text provided.", 400)
-		return
 	}
 
 	var count int
-	if raw_count, ok = form.Get("count"); !ok {
+	if raw_count, ok = c.FormValue("count"); !ok {
 		count = 10
 	} else if count, err = strconv.Atoi(raw_count); err != nil {
 		c.WriteErrorMessage("Bad count provided.", 400)
@@ -70,20 +58,14 @@ func SummaryHandler(c f.Context) {
 }
 
 func MapHandler(c f.Context) {
-	var err error
-	var form f.Form
-	if form, err = c.ParseForm(); err != nil {
-		c.WriteError(err, 500)
-	}
-
 	var ok bool
 	var lang, input string
-	if lang, ok = form.Get("lang"); !ok {
+	if lang, ok = c.FormValue("lang"); !ok {
 		c.WriteErrorMessage("No language provided.", 400)
 		return
 	}
 
-	if input, ok = form.Get("input"); !ok {
+	if input, ok = c.FormValue("input"); !ok {
 		c.WriteErrorMessage("No text provided.", 400)
 		return
 	}
