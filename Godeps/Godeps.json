@@ -9,12 +9,12 @@
 		},
 		{
 			"ImportPath": "github.com/lucasmenendez/framework.go",
-			"Comment": "v0.0.1-17-g65d7cc4",
-			"Rev": "65d7cc41922a6e811e0708345cf5b63cd7244d52"
+			"Comment": "v0.0.1-18-g14bf85e",
+			"Rev": "14bf85ef0f11cce47cfc8a533232e03d3ec04206"
 		},
 		{
 			"ImportPath": "github.com/lucasmenendez/gobstract",
-			"Rev": "350786306c816c328e25a6e60d39f2b092d7fe79"
+			"Rev": "71147dab7f1050002a2b87bb57f1c1addd6a8f76"
 		}
 	]
 }
