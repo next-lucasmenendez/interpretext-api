@@ -3,11 +3,7 @@ package gobstract
 import (
 	"sort"
 	"strings"
-)
-
-const (
-	scorableLength int = 100
-	maxKeywords int = 5
+	"fmt"
 )
 
 type Score struct {
@@ -18,6 +14,7 @@ type Score struct {
 type Scorer struct {
 	paragraphs 	*Paragraphs
 	sentences 	Sentences
+	tags		Tokens
 }
 
 func (sc *Scorer) addScores(scores []*Score) {
@@ -36,7 +33,7 @@ func (sc *Scorer) addScores(scores []*Score) {
 	}
 }
 
-func (sc *Scorer) addNeighbours() {
+func (sc *Scorer) neighbours() {
 	var scores []*Score
 	for i, s1 := range sc.sentences {
 		var score float64
@@ -57,7 +54,7 @@ func (sc *Scorer) addNeighbours() {
 	sc.addScores(scores)
 }
 
-func (sc *Scorer) addKeywords() {
+func (sc *Scorer) keywords() {
 	var tokens Tokens
 	for _, s := range sc.sentences {
 		tokens = append(tokens, s.Tokens...)
@@ -90,11 +87,18 @@ func (sc *Scorer) addKeywords() {
 	var keywords Tokens
 	var l int = (max - min) / 3
 	for _, t := range tokens {
-		if t.Score >= l {
+		var included bool = false
+		for _, k := range keywords {
+			if t.diff(k) < maxLevenshtain {
+				included = true
+				break
+			}
+		}
+
+		if t.Score >= l && !included {
 			keywords = append(keywords, t)
 		}
 	}
-
 
 	var scores []*Score
 	for _, s := range sc.sentences {
@@ -108,6 +112,7 @@ func (sc *Scorer) addKeywords() {
 		scores = append(scores, &Score{s, v})
 	}
 
+	sc.tags = keywords
 	sc.addScores(scores)
 }
 
@@ -139,7 +144,7 @@ func (sc *Scorer) titles() {
 	for _, s := range sc.sentences {
 		var	o int
 		for _, k := range keywords {
-			if s.HasToken(k) {
+			if s.HasSimilarToken(k) {
 				o++
 			}
 		}
@@ -170,32 +175,80 @@ func (sc *Scorer) order() {
 	sc.addScores(scores)
 }
 
-func NewScorer(paragraphs *Paragraphs) *Scorer {
-	var sentences Sentences
+func (sc *Scorer) printLevenshtain() {
+	for _, sp := range sc.sentences {
+		var s Sentence = *sp
+		var matrix [][]float64 = make([][]float64, len(s.Tokens))
+		for i := 0; i < len(matrix); i++ {
+			matrix[i] = make([]float64, len(s.Tokens))
+		}
 
+		fmt.Println(s.Text)
+
+		for i := 0; i < len(s.Tokens); i++ {
+			var t1 *Token = s.Tokens[i]
+			for j := 0; j < len(s.Tokens); j++ {
+				var t2 *Token = s.Tokens[j]
+
+				matrix[i][j] = t1.diff(t2)
+			}
+		}
+
+		fmt.Print(" NULL \t")
+		for _, t := range s.Tokens {
+			fmt.Printf("%s\t", t.Raw)
+		}
+		fmt.Println("")
+
+		for i := 0; i < len(s.Tokens); i++ {
+			var t *Token = s.Tokens[i]
+			fmt.Printf("%s\t", t.Raw)
+			for j := 0; j < len(s.Tokens); j++ {
+				fmt.Printf("%f\t", matrix[i][j])
+			}
+			fmt.Println("")
+		}
+	}
+}
+
+func NewScorer(paragraphs *Paragraphs) *Scorer {
+	var a Sentences
 	for _, p := range *paragraphs {
 		for _, s := range *p.Sentences {
 			if len(s.Text) > scorableLength {
-				sentences = append(sentences, s)
+				a = append(a, s)
 			}
 		}
 	}
 
-	for i, s1 := range sentences {
-		for j, s2 := range sentences {
-			if i != j && s1.Text == s2.Text {
-				sentences.Delete(i)
+	var la int = len(a)
+	for i := 0; i < la; i++ {
+		var x *Sentence = a[i]
+		for j := 0; j < la; j++ {
+			var y *Sentence = a[j]
+			if i != j && x.Text == y.Text {
+				a.Delete(i)
+				la--
 				break
 			}
 		}
 	}
 
-	return &Scorer{paragraphs: paragraphs, sentences: sentences}
+	var s Sentences
+	for _, x := range a {
+		if x != nil {
+			s = append(s, x)
+		}
+	}
+
+	return &Scorer{paragraphs: paragraphs, sentences: s}
 }
 
 func (sc *Scorer) Calc() {
-	sc.addNeighbours()
-	sc.addKeywords()
+	sc.neighbours()
+	sc.keywords()
+
+	sc.titles()
 	sc.length()
 	sc.order()
 }
@@ -236,16 +289,7 @@ func (sc *Scorer) SelectHighlights(max int) (highlights []string) {
 }
 
 func (sc *Scorer) SelectKeywords() (keywords []string) {
-	var tokens Tokens
-	for _, s := range sc.sentences {
-		tokens = append(tokens, s.Tokens...)
-	}
-
-	for _, p := range *sc.paragraphs {
-		if p.Title != nil {
-			tokens = append(tokens, p.Title.Tokens...)
-		}
-	}
+	var tokens Tokens = sc.tags
 
 	sort.Sort(tokens)
 	var raw Tokens
@@ -266,7 +310,6 @@ func (sc *Scorer) SelectKeywords() (keywords []string) {
 			break
 		}
 	}
-
 
 	for _, keyword := range raw {
 		if strings.TrimSpace(keyword.Raw) != "" {

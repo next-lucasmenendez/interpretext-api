@@ -6,18 +6,20 @@ import (
 )
 
 type Sentence struct {
-	Text string
-	raw_text string
-	Lang *Language
-	Tokens []*Token
-	Score float64
-	Order int
+	Text    string
+	rawText string
+	Lang    *Language
+	Tokens  []*Token
+	Score   float64
+	Order   int
 }
 
 type Sentences []*Sentence
 
-func (s Sentences) Delete(index int) {
-	s = append(s[:index], s[index+1:]...)
+func (s Sentences) Delete(index int) (sentences Sentences){
+	copy(s[index:], s[index + 1:])
+	s[len(s) - 1] = nil
+	return s[:len(s) - 1]
 }
 
 func (s Sentences) SortScore() {
@@ -46,6 +48,10 @@ func NewSentence(txt string, o int, l *Language) (s *Sentence) {
 	var sc float64
 
 	return &Sentence{txt, r, l, t, sc, o}
+}
+
+func (s *Sentence) HasSimilarToken(t *Token) bool {
+	return t.IsSimilarIn(s.Tokens)
 }
 
 func (s *Sentence) HasToken(t *Token) bool {
