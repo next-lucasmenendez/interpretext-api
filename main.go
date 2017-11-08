@@ -20,6 +20,7 @@ func main() {
 		s.SetPort(port)
 	}
 
+	s.POST("/", api.MainHandler)
 	s.POST("/map", api.MapHandler)
 	s.POST("/tweet", api.TweetHandler)
 	s.POST("/summary", api.SummaryHandler)
