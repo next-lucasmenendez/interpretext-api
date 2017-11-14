@@ -15,6 +15,14 @@
 		{
 			"ImportPath": "github.com/lucasmenendez/gobstract",
 			"Rev": "849023165666e95cb4bb9dfbd02e5f9c7173e535"
+		},
+		{
+			"ImportPath": "github.com/lucasmenendez/gotagger",
+			"Rev": "da27774261deae11c0d4e7d9402959d00a8a1822"
+		},
+		{
+			"ImportPath": "github.com/lucasmenendez/gotokenizer",
+			"Rev": "5a0985105e0ef1fad89b5984257d3960d94d9eec"
 		}
 	]
 }
