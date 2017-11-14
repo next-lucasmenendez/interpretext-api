@@ -1,8 +1,12 @@
 {
 	"ImportPath": "github.com/beeva-labs/interpretext-api",
-	"GoVersion": "go1.8",
+	"GoVersion": "go1.9",
 	"GodepVersion": "v79",
 	"Deps": [
+		{
+			"ImportPath": "github.com/abadojack/whatlanggo",
+			"Rev": "e8691489d4025904369f4f585138748c89db3ea4"
+		},
 		{
 			"ImportPath": "github.com/beeva-lucasmenendez/gocountrydetect",
 			"Rev": "2f7f70d66027a5fc7dc96f821df7d798ccd40f0a"
@@ -14,7 +18,7 @@
 		},
 		{
 			"ImportPath": "github.com/lucasmenendez/gobstract",
-			"Rev": "849023165666e95cb4bb9dfbd02e5f9c7173e535"
+			"Rev": "8ebc6c1a37897c86a89fc93a76e4c9b665765a2e"
 		},
 		{
 			"ImportPath": "github.com/lucasmenendez/gotagger",

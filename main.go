@@ -13,13 +13,14 @@ func main() {
 
 	s.DebugMode(true)
 
-	port_raw := os.Getenv("PORT")
-	if port, err := strconv.Atoi(port_raw); err != nil {
+	portRaw := os.Getenv("PORT")
+	if port, err := strconv.Atoi(portRaw); err != nil {
 		port = 9999
 	} else {
 		s.SetPort(port)
 	}
 
+	s.POST("/", api.MainHandler)
 	s.POST("/map", api.MapHandler)
 	s.POST("/tweet", api.TweetHandler)
 	s.POST("/summary", api.SummaryHandler)
