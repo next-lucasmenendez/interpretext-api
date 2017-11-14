@@ -1,16 +1,15 @@
 package api
 
-import "github.com/chrisport/go-lang-detector/langdet/langdetdef"
+import "github.com/abadojack/whatlanggo"
 
 func getLanguage(input string) (lang string, ok bool) {
-	detector := langdetdef.NewWithDefaultLanguages()
-	l := detector.GetClosestLanguage(input)
-
-	if l == "spanish" {
-		lang = "es"
-	} else if l == "english" {
-		return "", false
+	info := whatlanggo.Detect(input)
+	l := whatlanggo.LangToString(info.Lang)
+	if l == "spa" {
+		return "es", true
+	} else if l == "eng" {
+		return "en", true
 	}
 
-	return lang, true
+	return "", false
 }

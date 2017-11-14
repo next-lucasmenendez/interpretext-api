@@ -1,6 +1,8 @@
 package api
 
-import f "github.com/lucasmenendez/framework.go"
+import (
+	f "github.com/lucasmenendez/framework.go"
+)
 
 func MainHandler(c f.Context) {
 	var ok bool
