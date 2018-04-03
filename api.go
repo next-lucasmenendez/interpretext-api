@@ -32,10 +32,7 @@ func summaryHandler(w http.ResponseWriter, r *http.Request) {
 		log.Panic(e)
 	}
 
-	d := map[string]interface{}{
-		"highlights": s.Summarize(),
-		"lang":       lang,
-	}
+	d := map[string]interface{} { "summary": s.Summarize() }
 	responseJson(w, d)
 }
 
@@ -45,7 +42,7 @@ func languageHandler(w http.ResponseWriter, r *http.Request) {
 		log.Panic("No input")
 	}
 
-	d := map[string]interface{}{"lang": langdetector.Suggest(input)}
+	d := map[string]interface{} {"lang": langdetector.Suggest(input)}
 	responseJson(w, d)
 }
 
@@ -65,7 +62,7 @@ func tokenizeHandler(w http.ResponseWriter, r *http.Request) {
 		tokens = append(tokens, tokenizer.Words(input))
 	}
 
-	d := map[string]interface{}{"tokens": tokens}
+	d := map[string]interface{} {"tokens": tokens}
 	responseJson(w, d)
 }
 
