@@ -14,7 +14,7 @@ import (
 
 func checkInput(w http.ResponseWriter, r *http.Request) (input string) {
 	if input = r.FormValue("input"); input == "" {
-		http.Error(w, "no input text provided", 400)
+		http.Error(w, "No input text provided", 400)
 		log.Panic("No input")
 	}
 
@@ -26,6 +26,7 @@ func responseJson(w http.ResponseWriter, d interface{}) {
 		http.Error(w, "Error parsing JSON response.", 500)
 		log.Panic(e)
 	} else {
+		w.Header().Set("Content-Type", "application/json")
 		w.Write(res)
 	}
 }
@@ -59,7 +60,7 @@ func tokenizeHandler(w http.ResponseWriter, r *http.Request) {
 func postaggingHandler(w http.ResponseWriter, r *http.Request) {
 	var models string = os.Getenv("MODELS")
 	if models == "" {
-		http.Error(w, "No models configured for PoS tagging", 500)
+		http.Error(w, "No models configured for PoS tagging.", 500)
 		log.Fatal("Empty MODELS env variable")
 	}
 
@@ -79,7 +80,7 @@ func postaggingHandler(w http.ResponseWriter, r *http.Request) {
 
 	var modelPath string = fmt.Sprintf("%s/%s", models, lang)
 	if model, e := postagger.LoadModel(modelPath); e != nil {
-		http.Error(w, "Error loading model for PoS tagging", 500)
+		http.Error(w, "Error loading model for PoS tagging.", 500)
 		log.Fatal(e)
 	} else {
 		var (
@@ -88,7 +89,7 @@ func postaggingHandler(w http.ResponseWriter, r *http.Request) {
 		)
 
 		if len(tagged) == 0 {
-			http.Error(w, "No tags founded.", 404)
+			http.Error(w, "No tags were found.", 404)
 		}
 
 		d := map[string]interface{} { "tagged": tagged }
