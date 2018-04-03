@@ -12,7 +12,7 @@ Clone this repo and build docker image:
 ```sh
 git clone https://github.com/beeva-labs/interpretext-api && cd ./interpretext-api
 docker build -t interpretext ./
-``
+```
 
 ## Run
 To deploy API server, run docker container:
