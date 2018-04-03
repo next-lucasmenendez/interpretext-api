@@ -6,7 +6,8 @@ HTTP API to provide simple NLP functions in golang. Includes:
  - [Text Summarizer](https://github.com/beeva-labs/text-summarizer)
 
 ## Installation
-** Installation requires [docker](https://docs.docker.com/install/)**
+
+**Installation requires [docker](https://docs.docker.com/install/)**
 
 Clone this repo and build docker image:
 ```sh
