@@ -44,7 +44,7 @@ Returns estimated language of input text provided.
 ##### Body (Multipart Form)
 
 ```
-    input: <single or multiline text:string>
+    input: "<single or multiline text:string>"
 ```
 
 #### Response
@@ -53,7 +53,7 @@ Returns estimated language of input text provided.
 
 ```json
     {
-    	"lang": <language-code:string>
+    	"lang": "<language-code:string>"
     }
 ```
 
@@ -85,7 +85,7 @@ Splits input text into sentences and words. Returns list of sentence words into 
 ##### Body (Multipart Form)
 
 ```
-    input: <single or multiline text:string>
+    input: "<single or multiline text:string>"
 ```
 
 #### Response
@@ -94,7 +94,7 @@ Splits input text into sentences and words. Returns list of sentence words into 
 
 ```json
     {
-    	"tokens": <tokenized list of sentences:[][]string>
+    	"tokens": "<tokenized list of sentences:[][]string>"
     }
 ```
 
@@ -124,7 +124,7 @@ Splits input text provided into tokens and tagged each token with models trained
 ##### Body (Multipart Form)
 
 ```
-    input: <single or multiline text:string>
+    input: "<single or multiline text:string>"
 ```
 
 #### Response
@@ -133,7 +133,7 @@ Splits input text provided into tokens and tagged each token with models trained
 
 ```json
     {
-    	"tokens": <list of tuples token-tag:[][]string>
+    	"tokens": "<list of tuples token-tag:[][]string>"
     }
 ```
 
@@ -177,7 +177,7 @@ Extracts _"most relevant"_ sentences from the input text provided. Returns list 
 ##### Body (Multipart Form)
 
 ```
-    input: <single or multiline text:string>
+    input: "<single or multiline text:string>"
 ```
 
 #### Response
@@ -186,7 +186,7 @@ Extracts _"most relevant"_ sentences from the input text provided. Returns list 
 
 ```json
     {
-    	"summary": <list of highlights:[]string>
+    	"summary": "<list of highlights:[]string>"
     }
 ```
 
