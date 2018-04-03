@@ -60,7 +60,7 @@ Returns estimated language of input text provided.
 ##### 400 Bad Request response (text/plain)
 
 ```
-	No input text provided.
+    No input text provided.
 ```
 
 ##### 500 Internal Server Error response (text/plain)
@@ -101,8 +101,9 @@ Splits input text into sentences and words. Returns list of sentence words into 
 ##### 400 Bad Request response (text/plain)
 
 ```
-	No input text provided.
+    No input text provided.
 ```
+
 ##### 500 Internal Server Error response (text/plain)
 
 ```
@@ -140,22 +141,22 @@ Splits input text provided into tokens and tagged each token with models trained
 ##### 204 No Content response (text/plain)
 
 ```
-	No tags were found.
+    No tags were found.
 ```
 
 ##### 400 Bad Request response (text/plain)
 
 ```
-	No input text provided.
+    No input text provided.
 ```
 ##### 500 Internal Server Error response (text/plain)
 
 ```
-	No models configured for PoS tagging.
+    No models configured for PoS tagging.
 ```
 
 ```
-	Error loading model for PoS tagging.
+    Error loading model for PoS tagging.
 ```
 
 ```
@@ -193,7 +194,7 @@ Extracts _"most relevant"_ sentences from the input text provided. Returns list 
 ##### 400 Bad Request response (text/plain)
 
 ```
-	No input text provided.
+    No input text provided.
 ```
 
 ##### 500 Internal Server Error response (text/plain)
@@ -203,7 +204,7 @@ Extracts _"most relevant"_ sentences from the input text provided. Returns list 
 ```
 
 ```
-	Error analyzing input text.
+    Error analyzing input text.
 ```
 
 
