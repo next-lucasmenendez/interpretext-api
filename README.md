@@ -27,8 +27,8 @@ To deploy API server, run docker container:
 ---
 
 
-
 ## API Endpoints
+
 
 ### POST `/language`
 Returns estimated language of input text provided.
@@ -69,7 +69,6 @@ Returns estimated language of input text provided.
     Error parsing JSON response.
 ```
 
---
 
 ### POST `/tokenize`
 Splits input text into sentences and words. Returns list of sentence words into a list of sentences.
@@ -109,7 +108,7 @@ Splits input text into sentences and words. Returns list of sentence words into 
 ```
     Error parsing JSON response.
 ```
---
+
 
 ### POST `/postagging`
 Splits input text provided into tokens and tagged each token with models trained. For mor infor check [PoS Tagger repo](https://github.com/beeva-labs/postagger). Returns list of tuples with the token and it's (suggested) tag.
@@ -162,7 +161,7 @@ Splits input text provided into tokens and tagged each token with models trained
 ```
     Error parsing JSON response.
 ```
---
+
 
 ### POST `/summary`
 Extracts _"most relevant"_ sentences from the input text provided. Returns list of top sentences according to its position in the original text.
