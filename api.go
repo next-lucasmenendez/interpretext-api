@@ -3,13 +3,13 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/beeva-labs/lang-detector"
-	"github.com/beeva-labs/text-summarizer"
-	"github.com/beeva-labs/text-tokenizer"
 	"log"
 	"net/http"
 	"os"
-	"github.com/beeva-labs/postagger"
+	tokenizer "github.com/next-lucasmenendez/interpretext-tokenizer"
+	langdetector "github.com/next-lucasmenendez/interpretext-lang-detector"
+	postagger "github.com/next-lucasmenendez/interpretext-postagger"
+	summarizer "github.com/next-lucasmenendez/interpretext-summarizer"
 )
 
 func checkInput(w http.ResponseWriter, r *http.Request) (input string) {

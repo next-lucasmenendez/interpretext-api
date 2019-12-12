@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/beeva-labs/postagger"
+	postagger "github.com/next-lucasmenendez/interpretext-postagger"
 	"log"
 	"os"
 	"path/filepath"
