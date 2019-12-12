@@ -6,10 +6,12 @@ import (
 	"log"
 	"net/http"
 	"os"
+
 	tokenizer "github.com/next-lucasmenendez/interpretext-tokenizer"
 	langdetector "github.com/next-lucasmenendez/interpretext-lang-detector"
+    keywords "github.com/next-lucasmenendez/interpretext-keyword-extractor"
 	postagger "github.com/next-lucasmenendez/interpretext-postagger"
-	summarizer "github.com/next-lucasmenendez/interpretext-summarizer"
+	summarizer "github.com/next-lucasmenendez/interpretext-text-summarizer"
 )
 
 func checkInput(w http.ResponseWriter, r *http.Request) (input string) {
@@ -54,6 +56,33 @@ func tokenizeHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	d := map[string]interface{} {"tokens": tokens}
+	responseJson(w, d)
+}
+
+func keywordsHandler(w http.ResponseWriter, r *http.Request) {
+	var (
+		results [][]string
+		tokens []string
+		input string = checkInput(w, r)
+		lang string = langdetector.Suggest(input)
+		sentences []string = tokenizer.Sentences(input)
+	)
+
+	if len(sentences) > 0 {
+		for _, s := range sentences {
+			tokens = append(tokens, tokenizer.Words(s)...)
+		}
+	} else {
+		tokens = append(tokens, tokenizer.Words(input)...)
+	}
+
+	var e error
+	if results, e = keywords.GetTags(tokens, lang, 12); e != nil {
+        http.Error(w, "Error extracting keywords from input text.", 500)
+		log.Fatal(e.Error())
+    }
+
+	d := map[string]interface{} {"keywords": results}
 	responseJson(w, d)
 }
 
@@ -122,7 +151,10 @@ func startApi() {
 
 	http.HandleFunc("/language", languageHandler)
 	http.HandleFunc("/tokenize", tokenizeHandler)
+	http.HandleFunc("/keywords", keywordsHandler)
 	http.HandleFunc("/postagging", postaggingHandler)
 	http.HandleFunc("/summary", summaryHandler)
+
+	fmt.Printf("Listening on port %s...", port)
 	log.Fatal(http.ListenAndServe(port, nil))
 }
